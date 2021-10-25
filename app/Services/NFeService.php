@@ -34,7 +34,11 @@ class NFeService{
         $nfe->tagenderEmit(CreateEndEmiNFe());
         $nfe->tagdest(CreateDesNFe());
         $nfe->tagenderDest(CreateEndDesNFe());
-        $nfe->tagprod(CreateListProd());
+        $nfe->tagprod(CreateListProdNFe());
+        $nfe->taginfAdProd(CreateAddtionalProdInfoNFe());
+        $nfe->tagimposto(CreateImpNFe());
+        $nfe->tagICMS(CreateICMSNFe());
+
     } 
     
     private function CreateInfNFe(){
@@ -140,35 +144,99 @@ class NFeService{
         return $std;
     }
 
-    private function CreateListProd(){
+    private function CreateListProdNFe(){
         $std = new stdClass();
 
-        $std->item = 1; //item da NFe
-        $std->cProd;
-        $std->cEAN;
-        $std->cBarra;
-        $std->xProd;
-        $std->NCM;
-        $std->cBenef;
-        $std->EXTIPI;
-        $std->CFOP;
-        $std->uCom;
-        $std->qCom;
-        $std->vUnCom;
-        $std->vProd;
-        $std->cEANTrib;
-        $std->cBarraTrib;
-        $std->uTrib;
-        $std->qTrib;
-        $std->vUnTrib;
-        $std->vFrete;
-        $std->vSeg;
-        $std->vDesc;
-        $std->vOutro;
-        $std->indTot;
-        $std->xPed;
-        $std->nItemPed;
-        $std->nFCI;
+        $std->item = 1;
+        $std->cProd = "4450";
+        $std->cEAN = "SEM GTIN";
+        $std->cBarra = "";
+        $std->xProd = "SISTEMA DE LINHA DE VIDA HORIZONTAIS RETRÁTEIS DE FÁCIL INSTALAÇÃO COM CAPACIDADE PARA DOIS OPERÁRIOS 18,3M DE CABO DE A";
+        $std->NCM = "44170010";
+        $std->cBenef = "";
+        $std->EXTIPI = "";
+        $std->CFOP = "5405";
+        $std->uCom = "PÇ";
+        $std->qCom = "1";
+        $std->vUnCom = "4298.43";
+        $std->vProd = "4298.43";
+        $std->cEANTrib = "";
+        $std->cBarraTrib = "";
+        $std->uTrib = "PÇ";
+        $std->qTrib = "1";
+        $std->vUnTrib = "4298.43";
+        $std->vFrete = "";
+        $std->vSeg = "";
+        $std->vDesc = "";
+        $std->vOutro = "";
+        $std->indTot = "1";
+        $std->xPed = "-1023368";
+        $std->nItemPed = "";
+        $std->nFCI = "";
+    }
+
+    private function CreateAddtionalProdInfoNFe(){
+        $std = new stdClass();
+
+        $std->item = 1;
+        $std->infAdProd = 'informacao adicional do item';
+
+        return $std;
+    }
+
+    private function CreateImpNFe(){
+        $std = new stdClass();
+        $std->item = 1;
+        $std->vTotTrib = 0.00;
+
+        return $std;
+    }
+
+    private function CreateICMSNFe(){
+        $std = new stdClass();
+        $std->item = 1;
+        $std->orig;
+        $std->CST;
+        $std->modBC;
+        $std->vBC = "4298.43";
+        $std->pICMS;
+        $std->vICMS = "171.94";
+        $std->pFCP;
+        $std->vFCP;
+        $std->vBCFCP;
+        $std->modBCST;
+        $std->pMVAST;
+        $std->pRedBCST;
+        $std->vBCST;
+        $std->pICMSST;
+        $std->vICMSST;
+        $std->vBCFCPST;
+        $std->pFCPST;
+        $std->vFCPST;
+        $std->vICMSDeson;
+        $std->motDesICMS;
+        $std->pRedB;
+        $std->vICMSOp;
+        $std->pDif;
+        $std->vICMSDif;
+        $std->vBCSTRe;
+        $std->pST;
+        $std->vICMSSTRet;
+        $std->vBCFCPSTRet;
+        $std->pFCPSTRet;
+        $std->vFCPSTRet;
+        $std->pRedBCEfet;
+        $std->vBCEfet;
+        $std->pICMSEfet;
+        $std->vICMSEfet;
+        $std->vICMSSubstituto;
+        $std->vICMSSTDeson;
+        $std->motDesICMSST;
+        $std->pFCPDif;
+        $std->vFCPDif;
+        $std->vFCPEfet;
+
+        return $std;
     }
 
     private function CheckCPForCNPJ($std, $info){
