@@ -15,24 +15,24 @@ class NFeService{
     public function CreateNFe(){
         $nfe = new Make();
 
-        $nfe->taginfNFe(CreateInfNFe());
-        $nfe->tagide(CreateIdNFe());
-        $nfe->tagemit(CreateEmiNFe());
-        $nfe->tagenderEmit(CreateEndEmiNFe());
-        $nfe->tagdest(CreateDesNFe());
-        $nfe->tagenderDest(CreateEndDesNFe());
-        $nfe->tagprod(CreateListProdNFe());
-        $nfe->taginfAdProd(CreateAddtionalProdInfoNFe());
-        $nfe->tagimposto(CreateImpNFe());
-        $nfe->tagICMS(CreateICMSNFe());
-        $nfe->tagPIS(CreatePISNFe());
-        $nfe->tagCOFINS(CreateCOFINSNFe());
-        $nfe->tagICMSTot(CalculeICMSTot());
-        $nfe->tagtransp(CreateTranspNFe());
-        $nfe->tagvol(CreateVolNFe());
-        $nfe->tagpag(CreatePagNFe());
-        $nfe->tagdetPag(CreateDetailPagNFe());
-        $nfe->taginfAdic(CreateAddtionalInfoNFe());
+        $nfe->taginfNFe($this->CreateInfNFe());
+        $nfe->tagide($this->CreateIdNFe());
+        $nfe->tagemit($this->CreateEmiNFe());
+        $nfe->tagenderEmit($this->CreateEndEmiNFe());
+        $nfe->tagdest($this->CreateDesNFe());
+        $nfe->tagenderDest($this->CreateEndDesNFe());
+        $nfe->tagprod($this->CreateListProdNFe());
+        $nfe->taginfAdProd($this->CreateAddtionalProdInfoNFe());
+        $nfe->tagimposto($this->CreateImpNFe());
+        $nfe->tagICMS($this->CreateICMSNFe());
+        $nfe->tagPIS($this->CreatePISNFe());
+        $nfe->tagCOFINS($this->CreateCOFINSNFe());
+        $nfe->tagICMSTot($this->CalculeICMSTot());
+        $nfe->tagtransp($this->CreateTranspNFe());
+        $nfe->tagvol($this->CreateVolNFe());
+        $nfe->tagpag($this->CreatePagNFe());
+        $nfe->tagdetPag($this->CreateDetailPagNFe());
+        $nfe->taginfAdic($this->CreateAddtionalInfoNFe());
 
         $nfe->monta();
 
@@ -119,7 +119,7 @@ class NFeService{
         $std->ISUF = "";
         $std->IM = "InsMun";
         $std->email = "";
-        $std->CheckCPForCNPJ("07385111000102");
+        $std->CNPJ = "07385111000102"; //$this->CheckCPForCNPJ($std,"07385111000102");
 
         return $std;
     }
