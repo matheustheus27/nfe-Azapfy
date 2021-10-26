@@ -3,28 +3,15 @@
 namespace App\Services;
 
 use NFePHP\NFe\Make;
+use stdClass;
 
 class NFeService{
     private $config;
 
     public function __construct($config){
-        /*$config = [
-            "atualizacao" => "2015-10-02 06:01:21",
-            "tpAmb" => 2,
-            "razaosocial" => "Fake Materiais de construção Ltda",
-            "siglaUF" => "SP",
-            "cnpj" => "00716345000119",
-            "schemes" => "PL_008i2",
-            "versao" => "3.10",
-            "tokenIBPT" => "AAAAAAA",
-            "CSC" => "GPB0JBWLUR6HWFTVEAS6RJ69GPCROFPBBB8G",
-            "CSCid" => "000002",
-        ];
-        
-        $json = json_encode($config);*/
-
         $this->config = $config;
     }
+
     public function CreateNFe(){
         $nfe = new Make();
 
@@ -38,7 +25,18 @@ class NFeService{
         $nfe->taginfAdProd(CreateAddtionalProdInfoNFe());
         $nfe->tagimposto(CreateImpNFe());
         $nfe->tagICMS(CreateICMSNFe());
+        $nfe->tagPIS(CreatePISNFe());
+        $nfe->tagCOFINS(CreateCOFINSNFe());
+        $nfe->tagICMSTot(CalculeICMSTot());
+        $nfe->tagtransp(CreateTranspNFe());
+        $nfe->tagvol(CreateVolNFe());
+        $nfe->tagpag(CreatePagNFe());
+        $nfe->tagdetPag(CreateDetailPagNFe());
+        $nfe->taginfAdic(CreateAddtionalInfoNFe());
 
+        $nfe->monta();
+
+        return $nfe->getXML();
     } 
     
     private function CreateInfNFe(){
@@ -186,6 +184,7 @@ class NFeService{
 
     private function CreateImpNFe(){
         $std = new stdClass();
+
         $std->item = 1;
         $std->vTotTrib = 0.00;
 
@@ -194,47 +193,153 @@ class NFeService{
 
     private function CreateICMSNFe(){
         $std = new stdClass();
+
         $std->item = 1;
-        $std->orig;
-        $std->CST;
-        $std->modBC;
+        $std->orig = "";
+        $std->CST = "";
+        $std->modBC = "";
         $std->vBC = "4298.43";
-        $std->pICMS;
+        $std->pICMS = "";
         $std->vICMS = "171.94";
-        $std->pFCP;
-        $std->vFCP;
-        $std->vBCFCP;
-        $std->modBCST;
-        $std->pMVAST;
-        $std->pRedBCST;
-        $std->vBCST;
-        $std->pICMSST;
-        $std->vICMSST;
-        $std->vBCFCPST;
-        $std->pFCPST;
-        $std->vFCPST;
-        $std->vICMSDeson;
-        $std->motDesICMS;
-        $std->pRedB;
-        $std->vICMSOp;
-        $std->pDif;
-        $std->vICMSDif;
-        $std->vBCSTRe;
-        $std->pST;
-        $std->vICMSSTRet;
-        $std->vBCFCPSTRet;
-        $std->pFCPSTRet;
-        $std->vFCPSTRet;
-        $std->pRedBCEfet;
-        $std->vBCEfet;
-        $std->pICMSEfet;
-        $std->vICMSEfet;
-        $std->vICMSSubstituto;
-        $std->vICMSSTDeson;
-        $std->motDesICMSST;
-        $std->pFCPDif;
-        $std->vFCPDif;
-        $std->vFCPEfet;
+        $std->pFCP = "";
+        $std->vFCP = "";
+        $std->vBCFCP = "";
+        $std->modBCST = "";
+        $std->pMVAST = "";
+        $std->pRedBCST = "";
+        $std->vBCST = "";
+        $std->pICMSST = "";
+        $std->vICMSST = "";
+        $std->vBCFCPST = "";
+        $std->pFCPST = "";
+        $std->vFCPST = "";
+        $std->vICMSDeson = "";
+        $std->motDesICMS = "";
+        $std->pRedB = "";
+        $std->vICMSOp = "";
+        $std->pDif = "";
+        $std->vICMSDif = "";
+        $std->vBCSTRe = "";
+        $std->pST = "";
+        $std->vICMSSTRet = "";
+        $std->vBCFCPSTRet = "";
+        $std->pFCPSTRet = "";
+        $std->vFCPSTRet = "";
+        $std->pRedBCEfet = "";
+        $std->vBCEfet = "";
+        $std->pICMSEfet = "";
+        $std->vICMSEfet = "";
+        $std->vICMSSubstituto = "";
+        $std->vICMSSTDeson = "";
+        $std->motDesICMSST = "";
+        $std->pFCPDif = "";
+        $std->vFCPDif = "";
+        $std->vFCPEfet = "";
+
+        return $std;
+    }
+
+    private function CreatePISNFe(){
+        $std = new stdClass();
+
+        $std->item = 1;
+        $std->CST = '07';
+        $std->vBC = null;
+        $std->pPIS = null;
+        $std->vPIS = null;
+        $std->qBCProd = null;
+        $std->vAliqProd = null;
+
+        return $std;
+    }
+
+    private function CreateCOFINSNFe(){
+        $std = new stdClass();
+
+        $std->item = 1;
+        $std->CST = '07';
+        $std->vBC = null;
+        $std->pCOFINS = null;
+        $std->vCOFINS = null;
+        $std->qBCProd = null;
+        $std->vAliqProd = null;
+
+        return $std;
+    }
+
+    private function CalculeICMSTotNFe(){
+        $std = new stdClass();
+
+        $std->vBC = 1000.00;
+        $std->vICMS = 1000.00;
+        $std->vICMSDeson = 1000.00;
+        $std->vFCP = 1000.00;
+        $std->vBCST = 1000.00;
+        $std->vST = 1000.00;
+        $std->vFCPST = 1000.00;
+        $std->vFCPSTRet = 1000.00;
+        $std->vProd = 1000.00;
+        $std->vFrete = 1000.00;
+        $std->vSeg = 1000.00;
+        $std->vDesc = 1000.00;
+        $std->vII = 1000.00;
+        $std->vIPI = 1000.00;
+        $std->vIPIDevol = 1000.00;
+        $std->vPIS = 1000.00;
+        $std->vCOFINS = 1000.00;
+        $std->vOutro = 1000.00;
+        $std->vNF = 1000.00;
+        $std->vTotTrib = 1000.00;
+
+        return $std;
+    }
+
+    private function CreateTranspNFe(){
+        $std = new stdClass();
+
+        $std->modFrete = 1;
+
+        return $std;
+    }
+
+    private function CreateVolNFe(){
+        $std = new stdClass();
+
+        $std->item = 1;
+        $std->qVol = 2;
+        $std->esp = 'caixa';
+        $std->marca = 'OLX';
+        $std->nVol = '11111';
+        $std->pesoL = 10.50;
+        $std->pesoB = 11.00;
+
+        return $std;
+    }
+
+    private function CreatePagNFe(){
+        $std = new stdClass();
+        $std->vTroco = null;
+
+        return $std;
+    }
+
+    private function CreateDetailPagNFe(){
+        $std = new stdClass();
+        $std->tPag = '03';
+        $std->vPag = 200.00;
+        $std->CNPJ = '12345678901234';
+        $std->tBand = '01';
+        $std->cAut = '3333333';
+        $std->tpIntegra = 1;
+        $std->indPag = '0';
+
+        return $std;
+    }
+
+    private function CreateAddtionalInfoNFe(){
+        $std = new stdClass();
+        $std->infAdFisco = 'informacoes para o fisco';
+        $std->infCpl = 'informacoes complementares';
 
         return $std;
     }

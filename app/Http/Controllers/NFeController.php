@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Services\NFeService;
 
 class NFeController extends Controller
 {
@@ -13,7 +14,7 @@ class NFeController extends Controller
      */
     public function index()
     {
-        return 'ok';
+        return 201;
     }
 
     /**
@@ -34,7 +35,22 @@ class NFeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $nfe_service = new NFeService([
+            "atualizacao" => "2015-10-02 06:01:21",
+            "tpAmb" => 2,
+            "razaosocial" => "Fake Materiais de construção Ltda",
+            "siglaUF" => "SP",
+            "cnpj" => "00716345000119",
+            "schemes" => "PL_008i2",
+            "versao" => "3.10",
+            "tokenIBPT" => "AAAAAAA",
+            "CSC" => "GPB0JBWLUR6HWFTVEAS6RJ69GPCROFPBBB8G",
+            "CSCid" => "000002"
+        ]);
+
+        header('Content-Type: text/xml; charset=UTF-8');
+        return $nfe_service->CreateNFe();
+
     }
 
     /**
