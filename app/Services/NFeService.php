@@ -3,191 +3,211 @@
 namespace App\Services;
 
 use NFePHP\NFe\Make;
+use NFePHP\NFe\Complements;
+use NFePHP\NFe\Tools;
+use NFePHP\Common\Certificate;
 use stdClass;
 
-class NFeService{
+class NFeServiceCreateXML{
     private $config;
 
     public function __construct($config){
-        $this->config = $config;
+        $this->config = json_encode($config);
     }
 
-    public function CreateNFe(){
+    public function CreateNFe($data){
         $nfe = new Make();
 
-        $nfe->taginfNFe($this->CreateInfNFe());
-        $nfe->tagide($this->CreateIdNFe());
-        $nfe->tagemit($this->CreateEmiNFe());
-        $nfe->tagenderEmit($this->CreateEndEmiNFe());
-        $nfe->tagdest($this->CreateDesNFe());
-        $nfe->tagenderDest($this->CreateEndDesNFe());
-        $nfe->tagprod($this->CreateListProdNFe());
-        $nfe->taginfAdProd($this->CreateAddtionalProdInfoNFe());
-        $nfe->tagimposto($this->CreateImpNFe());
+        $nfe->taginfNFe($this->CreateInfNFe($data["inf"]));
+        $nfe->tagide($this->CreateIdNFe($data["id"]));
+        $nfe->tagemit($this->CreateEmiNFe($data["emi"]));
+        $nfe->tagenderEmit($this->CreateEndEmiNFe($data["emi"]));
+        $nfe->tagdest($this->CreateDesNFe($data["des"]));
+        $nfe->tagenderDest($this->CreateEndDesNFe($data["des"]));
+        $nfe->tagprod($this->CreateListProdNFe($data["prod"]));
+        $nfe->taginfAdProd($this->CreateAddtionalProdInfoNFe($data["prod"]));
+        $nfe->tagimposto($this->CreateImpNFe($data["prod"]));
         $nfe->tagICMS($this->CreateICMSNFe());
         $nfe->tagPIS($this->CreatePISNFe());
         $nfe->tagCOFINS($this->CreateCOFINSNFe());
-        $nfe->tagICMSTot($this->CalculeICMSTot());
+        $nfe->tagICMSTot($this->CalculeICMSTotNFe());
         $nfe->tagtransp($this->CreateTranspNFe());
         $nfe->tagvol($this->CreateVolNFe());
         $nfe->tagpag($this->CreatePagNFe());
         $nfe->tagdetPag($this->CreateDetailPagNFe());
         $nfe->taginfAdic($this->CreateAddtionalInfoNFe());
 
-        $nfe->monta();
-
-        return $nfe->getXML();
+        try {
+            $nfe->monta();
+            return $nfe->getXML();
+        } catch  (\Exception $e) {
+            echo "<pre>";
+           print_r($nfe->getErrors());
+            echo "</pre>";
+        }
     } 
     
     private function CreateInfNFe(){
         $std = new stdClass();
 
         $std->versao = '4.00';
-        $std->Id = 'NFe35150271780456000160550010000000021800700082';
+        $std->Id = "";
         $std->pk_nItem = null;
 
         return $std;
     }
 
-    private function CreateIdNFe(){
+    private function CreateIdNFe($id){
         $std = new stdClass();
 
-        $std->cUF = 43;
+        $std->cUF = $id["cUF"];
         $std->cNF = rand(11111111, 99999999);
-        $std->natOp = 'REVENDA DE MERCADORIAS SIMPLES NACIONAL - SC';
+        $std->natOp = $id["natOP"];
 
-        $std->mod = 55;
-        $std->serie = 1;
-        $std->nNF = 2;
-        $std->dhEmi = date("Y-m-d\TH:i:sP");
-        $std->dhSaiEnt = date("Y-m-d\TH:i:sP");
-        $std->tpNF = 1;
-        $std->idDest = 1;
-        $std->cMunFG = 3518800;
-        $std->tpImp = 1;
-        $std->tpEmis = 1;
-        $std->cDV = 2;
-        $std->tpAmb = 2;
-        $std->finNFe = 1;
-        $std->indFinal = 0;
-        $std->indPres = 0;
-        $std->indIntermed = null;
-        $std->procEmi = 0;
-        $std->verProc = '3.10.31';
-        $std->dhCont = null;
-        $std->xJust = null;
-
-        return $std;
-    }
-
-    private function CreateEmiNFe(){
-        $std = new stdClass();
-
-        $std->xNome = "E-Sales Solucoes Oobj";
-        $std->xFant = "Oobj";
-        $std->IE = "0963233556";
-        $std->CRT = "1";
-        $std->CNPJ = "07385111000102";
+        $std->mod = $id["mod"];;
+        $std->serie = $id["serie"];;
+        $std->nNF = $id["nNF"];
+        $std->dhEmi = $id["dhEmi"];
+        $std->dhSaiEnt = $id["dhSaiEnt"];
+        $std->tpNF = $id["tpNF"];
+        $std->idDest = $id["idDest"];
+        $std->cMunFG = $id["cMunFG"];
+        $std->tpImp = $id["tpImp"];
+        $std->tpEmis = $id["tpEmis"];
+        $std->cDV = $id["cDv"];
+        $std->tpAmb = $id["tpAmb"];
+        $std->finNFe = $id["fiNFe"];
+        $std->indFinal = $id["indFinal"];
+        $std->indPres = $id["indPres"];
+        $std->indIntermed = $id["procIntermed"];
+        $std->procEmi = $id["procEmi"];
+        $std->verProc = $id["verProc"];
+        $std->dhCont = $id["dhCont"];
+        $std->xJust = $id["xJust"];
 
         return $std;
     }
 
-    private function CreateEndEmiNFe(){
+    private function CreateEmiNFe($emi){
         $std = new stdClass();
 
-        $std->xLgr = "PROF ALGACYR MUNHOZ MADER";
-        $std->nro = "2800";
-        $std->xCpl = "";
-        $std->xBairro = "CIC";
-        $std->cMun = "4314902";
-        $std->xMun = "Porto Alegre";
-        $std->UF = "RS";
-        $std->CEP = "81310020";
-        $std->cPais = "1058";
-        $std->xPais = "BRASIL";
-        $std->fone = "4121098000";
+        $std->xNome = $emi["xNome"];
+        $std->xFant = $emi["xFant"];
+        $std->IE = $emi["IE"];
+        $std->IEST = $emi["IEST"];
+        $std->IM = $emi["IM"];
+        $std->CNAE = $emi["CNAE"];
+        $std->CRT = $emi["CRT"];
+        $std->CNPJ = $emi["CNPJ"];
+        $std->CPF = $emi["CPF"];
 
         return $std;
     }
 
-    private function CreateDesNFe(){
+    private function CreateEndEmiNFe($endEmi){
         $std = new stdClass();
 
-        $std->xNome = "E-SALES SOLUÇÕES DE INTEGRAÇÃO LTDA";
-        $std->indIEDest = "";
-        $std->IE = "0963233556";
-        $std->ISUF = "";
-        $std->IM = "InsMun";
-        $std->email = "";
-        $std->CNPJ = "07385111000102"; //$this->CheckCPForCNPJ($std,"07385111000102");
+        $std->xLgr = $endEmi["xLgr"];
+        $std->nro = $endEmi["nro"];
+        $std->xCpl = $endEmi["xCpl"];
+        $std->xBairro = $endEmi["xBairro"];
+        $std->cMun = $endEmi["cMun"];
+        $std->xMun = $endEmi["xMun"];
+        $std->UF = $endEmi["UF"];
+        $std->CEP = $endEmi["CEP"];
+        $std->cPais = $endEmi["cPais"];
+        $std->xPais = $endEmi["xPais"];
+        $std->fone = $endEmi["fone"];
 
         return $std;
     }
 
-    private function CreateEndDesNFe(){
+    private function CreateDesNFe($des){
         $std = new stdClass();
 
-        $std->xLgr = "AV. FRANÇA";
-        $std->nro = "1162";
-        $std->xCpl = "";
-        $std->xBairro = "NAVEGANTES";
-        $std->cMun = "4314902";
-        $std->xMun = "PORTO ALEGRE";
-        $std->UF = "RS";
-        $std->CEP = "44096486";
-        $std->cPais = "1058";
-        $std->xPais = "BRASIL";
-        $std->fone = "7536230233";
+        $std->xNome = $des["xNome"];
+        $std->indIEDest = $des["indIEDest"];
+        $std->IE = $des["IE"];
+        $std->ISUF = $des["ISUF"];
+        $std->IM = $des["IM"];
+        $std->email = $des["email"];
+        $std->CNPJ = $des["CNPJ"];
+        $std->CPF = $des["CPF"];
+        $std->idEstrangeiro = $des["idEstrangeiro"];
 
         return $std;
     }
 
-    private function CreateListProdNFe(){
+    private function CreateEndDesNFe($endDes){
         $std = new stdClass();
 
-        $std->item = 1;
-        $std->cProd = "4450";
-        $std->cEAN = "SEM GTIN";
-        $std->cBarra = "";
-        $std->xProd = "SISTEMA DE LINHA DE VIDA HORIZONTAIS RETRÁTEIS DE FÁCIL INSTALAÇÃO COM CAPACIDADE PARA DOIS OPERÁRIOS 18,3M DE CABO DE A";
-        $std->NCM = "44170010";
-        $std->cBenef = "";
-        $std->EXTIPI = "";
-        $std->CFOP = "5405";
-        $std->uCom = "PÇ";
-        $std->qCom = "1";
-        $std->vUnCom = "4298.43";
-        $std->vProd = "4298.43";
-        $std->cEANTrib = "";
-        $std->cBarraTrib = "";
-        $std->uTrib = "PÇ";
-        $std->qTrib = "1";
-        $std->vUnTrib = "4298.43";
-        $std->vFrete = "";
-        $std->vSeg = "";
-        $std->vDesc = "";
-        $std->vOutro = "";
-        $std->indTot = "1";
-        $std->xPed = "-1023368";
-        $std->nItemPed = "";
-        $std->nFCI = "";
-    }
-
-    private function CreateAddtionalProdInfoNFe(){
-        $std = new stdClass();
-
-        $std->item = 1;
-        $std->infAdProd = 'informacao adicional do item';
+        $std->xLgr = $endDes["xLgr"];
+        $std->nro = $endDes["nro"];
+        $std->xCpl = $endDes["xCpl"];
+        $std->xBairro = $endDes["xBairro"];
+        $std->cMun = $endDes["cMun"];
+        $std->xMun = $endDes["xMun"];
+        $std->UF = $endDes["UF"];
+        $std->CEP = $endDes["CEP"];
+        $std->cPais = $endDes["cPais"];
+        $std->xPais = $endDes["xPais"];
+        $std->fone = $endDes["fone"];
 
         return $std;
     }
 
-    private function CreateImpNFe(){
+    private function CreateListProdNFe($prods){
         $std = new stdClass();
 
-        $std->item = 1;
-        $std->vTotTrib = 0.00;
+        foreach($prods as $prod){
+            $std->item = $prod["item"];
+            $std->cProd = $prod["cProd"];
+            $std->cEAN = $prod["cEAN"];
+            $std->cBarra = $prod["cBarra"];
+            $std->xProd = $prod["xProd"];
+            $std->NCM = $prod["NCM"];
+            $std->cBenef = $prod["cBenef"];
+            $std->EXTIPI = $prod[""];
+            $std->CFOP = $prod["EXTIPI"];
+            $std->uCom = $prod["uCom"];
+            $std->qCom = $prod["qCom"];
+            $std->vUnCom = $prod["vUnCom"];
+            $std->vProd = $prod["vProd"];
+            $std->cEANTrib = $prod["cEANTrib"];
+            $std->cBarraTrib = $prod["cBarraTrib"];
+            $std->uTrib = $prod["uTrib"];
+            $std->qTrib = $prod["qTrib"];
+            $std->vUnTrib = $prod["vUnTrib"];
+            $std->vFrete = $prod["vFrete"];
+            $std->vSeg = $prod["vSeg"];
+            $std->vDesc = $prod["vDesc"];
+            $std->vOutro = $prod["vOutro"];
+            $std->indTot = $prod["indTot"];
+            $std->xPed = $prod["xPed"];
+            $std->nItemPed = $prod["nItemPed"];
+            $std->nFCI = $prod["nFCI"];
+        }
 
+        return $std;
+    }
+
+    private function CreateAddtionalProdInfoNFe($prods){
+        $std = new stdClass();
+        foreach($prods as $prod){
+            $std->item = $prod["item"];
+            $std->infAdProd = $prod["infAdProd"];
+        }
+
+        return $std;
+    }
+
+    private function CreateImpNFe($prods){
+        $std = new stdClass();
+        foreach($prods as $prod){
+            $std->item = $prod["item"];
+            $std->vTotTrib = $prod["vTotTrib"];
+        }
+        
         return $std;
     }
 
@@ -353,4 +373,77 @@ class NFeService{
 
         return $std;
     }
+}
+
+class NFeServiceRegisterXML{
+    private $config;
+
+    public function __construct($config){
+        $this->config = json_encode($config);
+    }
+
+    public function RegisterNFe($urlCetificate, $passCertificate, $urlXml){
+        $digitalCertificate = file_get_contents($cetificate);
+        $xml = simplexml_load_file($urlXml);
+
+        $tool = $this->DecodeCertificate($digitalCertificate, $passCertificate);
+        $xmlSigned = $this->SignNFe($tool, $xml);
+        $receipt = $this->SendBatchNFe($tool, $xmlSigned);
+
+        $protocol = $this->ConsultReceipt($receipt);
+
+        $xmlProtocoled = $this->GenerateProtocoledNFe($xmlSigned, $protocol);
+
+        return $xmlProtocoled;
+    }
+
+    private function SignNFe($tool, $xml){
+
+        try {
+            return $tools->signNFe($xml);
+        } catch (\Exception $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    private function SendBatchNFe($tool, $xmlSigned){
+
+        try {
+            $idLote = str_pad(100, 15, '0', STR_PAD_LEFT);
+            $resp = $tools->sefazEnviaLote([$xmlSigned], $idLote);
+        
+            $st = new NFePHP\NFe\Common\Standardize();
+            $std = $st->toStd($resp);
+
+            if ($std->cStat != 103) {
+                exit("[$std->cStat] $std->xMotivo");
+            }
+
+            return $std->infRec->nRec;
+        } catch (\Exception $e) {
+            exit($e->getMessage());
+        }
+    }
+
+    private function GenerateProtocoledNFe($xmlSigned, $protocol){
+        try {
+            return Complements::toAuthorize($xmlSigned, $protocol);
+        } catch (\Exception $e) {
+            echo "Erro: " . $e->getMessage();
+        }
+    }
+
+    private function DecodeCertificate($digitalCertificate, $passCertificate){
+        return new Tools($this->config, Certificate::readPfx($digitalCertificate, $passCertificate));
+    }
+
+    private function ConsultReceipt($receipt){
+        try {
+            return $tools->sefazConsultaRecibo($receipt);
+        } catch (\Exception $e) {
+            exit($e->getMessage());
+        }
+    }
+
+
 }

@@ -12,6 +12,7 @@
         "fideloper/proxy": "^4.4",
         "laravel/framework": "^6.20.26",
         "laravel/tinker": "^2.5",
+        "nfephp-org/sped-da": "^1.0",
         "nfephp-org/sped-nfe": "^5.0"
     },
     "require-dev": {
