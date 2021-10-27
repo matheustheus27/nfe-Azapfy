@@ -6,6 +6,7 @@ use NFePHP\NFe\Make;
 use NFePHP\NFe\Complements;
 use NFePHP\NFe\Tools;
 use NFePHP\Common\Certificate;
+use NFePHP\NFe\Common\Standardize;
 use stdClass;
 
 class NFeServiceCreateXML{
@@ -27,9 +28,9 @@ class NFeServiceCreateXML{
         $nfe->tagprod($this->CreateListProdNFe($data["prod"]));
         $nfe->taginfAdProd($this->CreateAddtionalProdInfoNFe($data["prod"]));
         $nfe->tagimposto($this->CreateImpNFe($data["prod"]));
-        $nfe->tagICMS($this->CreateICMSNFe());
-        $nfe->tagPIS($this->CreatePISNFe());
-        $nfe->tagCOFINS($this->CreateCOFINSNFe());
+        $nfe->tagICMS($this->CreateICMSNFe($data["prod"]));
+        $nfe->tagPIS($this->CreatePISNFe($data["prod"]));
+        $nfe->tagCOFINS($this->CreateCOFINSNFe($data["prod"]));
         $nfe->tagICMSTot($this->CalculeICMSTotNFe());
         $nfe->tagtransp($this->CreateTranspNFe());
         $nfe->tagvol($this->CreateVolNFe());
@@ -211,79 +212,85 @@ class NFeServiceCreateXML{
         return $std;
     }
 
-    private function CreateICMSNFe(){
+    private function CreateICMSNFe($prods){
         $std = new stdClass();
 
-        $std->item = 1;
-        $std->orig = "";
-        $std->CST = "";
-        $std->modBC = "";
-        $std->vBC = "4298.43";
-        $std->pICMS = "";
-        $std->vICMS = "171.94";
-        $std->pFCP = "";
-        $std->vFCP = "";
-        $std->vBCFCP = "";
-        $std->modBCST = "";
-        $std->pMVAST = "";
-        $std->pRedBCST = "";
-        $std->vBCST = "";
-        $std->pICMSST = "";
-        $std->vICMSST = "";
-        $std->vBCFCPST = "";
-        $std->pFCPST = "";
-        $std->vFCPST = "";
-        $std->vICMSDeson = "";
-        $std->motDesICMS = "";
-        $std->pRedB = "";
-        $std->vICMSOp = "";
-        $std->pDif = "";
-        $std->vICMSDif = "";
-        $std->vBCSTRe = "";
-        $std->pST = "";
-        $std->vICMSSTRet = "";
-        $std->vBCFCPSTRet = "";
-        $std->pFCPSTRet = "";
-        $std->vFCPSTRet = "";
-        $std->pRedBCEfet = "";
-        $std->vBCEfet = "";
-        $std->pICMSEfet = "";
-        $std->vICMSEfet = "";
-        $std->vICMSSubstituto = "";
-        $std->vICMSSTDeson = "";
-        $std->motDesICMSST = "";
-        $std->pFCPDif = "";
-        $std->vFCPDif = "";
-        $std->vFCPEfet = "";
+        foreach($prods as $prod){
+            $std->item = $prod["item"];
+            $std->orig = $prod["orig"];
+            $std->CST = $prod["CST"];
+            $std->modBC = $prod["modBC"];
+            $std->vBC = $prod["vBC"];
+            $std->pICMS = $prod["pICMS"];
+            $std->vICMS = $prod["vICMS"];
+            $std->pFCP = $prod["pFCP"];
+            $std->vFCP = $prod["vFCP"];
+            $std->vBCFCP = $prod["vBCFCP"];
+            $std->modBCST = $prod["modBCST"];
+            $std->pMVAST = $prod["pMVAST"];
+            $std->pRedBCST = $prod["pRedBCST"];
+            $std->vBCST = $prod["vBCST"];
+            $std->pICMSST = $prod["pICMSST"];
+            $std->vICMSST = $prod["vICMSST"];
+            $std->vBCFCPST = $prod["vBCFCPST"];
+            $std->pFCPST = $prod["pFCPST"];
+            $std->vFCPST = $prod["vFCPST"];
+            $std->vICMSDeson = $prod["vICMSDeson"];
+            $std->motDesICMS = $prod["motDesICMS"];
+            $std->pRedBC = $prod["pRedBC"];
+            $std->vICMSOp = $prod["vICMSOp"];
+            $std->pDif = $prod["pDif"];
+            $std->vICMSDif = $prod["vICMSDif"];
+            $std->vBCSTRet = $prod["vBCSTRet"];
+            $std->pST = $prod["pST"];
+            $std->vICMSSTRet = $prod["vICMSSTRet"];
+            $std->vBCFCPSTRet = $prod["vBCFCPSTRet"];
+            $std->pFCPSTRet = $prod["pFCPSTRet"];
+            $std->vFCPSTRet = $prod["vFCPSTRet"];
+            $std->pRedBCEfet = $prod["pRedBCEfet"];
+            $std->vBCEfet = $prod["vBCEfet"];
+            $std->pICMSEfet = $prod["pICMSEfet"];
+            $std->vICMSEfet = $prod["vICMSEfet"];
+            $std->vICMSSubstituto = $prod["vICMSSubstituto"];
+            $std->vICMSSTDeson = $prod["vICMSSTDeson"];
+            $std->motDesICMSST = $prod["motDesICMSST"];
+            $std->pFCPDif = $prod["pFCPDif"];
+            $std->vFCPDif = $prod["vFCPDif"];
+            $std->vFCPEfet = $prod["vFCPEfet"];
+        }
 
         return $std;
     }
 
-    private function CreatePISNFe(){
+    private function CreatePISNFe($prods){
         $std = new stdClass();
 
-        $std->item = 1;
-        $std->CST = '07';
-        $std->vBC = null;
-        $std->pPIS = null;
-        $std->vPIS = null;
-        $std->qBCProd = null;
-        $std->vAliqProd = null;
+        foreach($prods as $prod){
+            $std->item = $prod["item"];
+            $std->CST = $prod["CST"];
+            $std->vBC = $prod["vBC"];
+            $std->pPIS = $prod["pPIS"];
+            $std->vPIS = $prod["vPIS"];
+            $std->qBCProd = $prod["qBCProd"];
+            $std->vAliqProd = $prod["vAliqProd"];
+        }
 
         return $std;
     }
 
-    private function CreateCOFINSNFe(){
+    private function CreateCOFINSNFe($prods){
         $std = new stdClass();
 
-        $std->item = 1;
-        $std->CST = '07';
-        $std->vBC = null;
-        $std->pCOFINS = null;
-        $std->vCOFINS = null;
-        $std->qBCProd = null;
-        $std->vAliqProd = null;
-
+        foreach($prods as $prod){
+            $std->item = $prod["item"];
+            $std->CST = $prod["CST"];
+            $std->vBC = $prod["vBC"];
+            $std->pCOFINS = $prod["pCOFINS"];
+            $std->vCOFINS = $prod["vCOFINS"];
+            $std->qBCProd = $prod["qBCProd"];
+            $std->vAliqProd = $prod["vAliqProd"];
+        }
+        
         return $std;
     }
 
@@ -383,36 +390,37 @@ class NFeServiceRegisterXML{
     }
 
     public function RegisterNFe($urlCetificate, $passCertificate, $urlXml){
-        $digitalCertificate = file_get_contents($cetificate);
+        $digitalCertificate = file_get_contents($urlCetificate);
         $xml = simplexml_load_file($urlXml);
 
-        $tool = $this->DecodeCertificate($digitalCertificate, $passCertificate);
-        $xmlSigned = $this->SignNFe($tool, $xml);
-        $receipt = $this->SendBatchNFe($tool, $xmlSigned);
+        $decodeCertificate = $this->DecodeCertificate($digitalCertificate, $passCertificate);
 
-        $protocol = $this->ConsultReceipt($receipt);
+        $xmlSigned = $this->SignNFe($decodeCertificate, $xml);
+        $receipt = $this->SendBatchNFe($decodeCertificate, $xmlSigned);
+
+        $protocol = $this->ConsultReceipt($decodeCertificate, $receipt);
 
         $xmlProtocoled = $this->GenerateProtocoledNFe($xmlSigned, $protocol);
 
         return $xmlProtocoled;
     }
 
-    private function SignNFe($tool, $xml){
+    private function SignNFe($decodeCertificate, $xml){
 
         try {
-            return $tools->signNFe($xml);
+            return $decodeCertificate->signNFe($xml);
         } catch (\Exception $e) {
             exit($e->getMessage());
         }
     }
 
-    private function SendBatchNFe($tool, $xmlSigned){
+    private function SendBatchNFe($decodeCertificate, $xmlSigned){
 
         try {
             $idLote = str_pad(100, 15, '0', STR_PAD_LEFT);
-            $resp = $tools->sefazEnviaLote([$xmlSigned], $idLote);
+            $resp = $decodeCertificate->sefazEnviaLote([$xmlSigned], $idLote);
         
-            $st = new NFePHP\NFe\Common\Standardize();
+            $st = new Standardize();
             $std = $st->toStd($resp);
 
             if ($std->cStat != 103) {
@@ -437,13 +445,11 @@ class NFeServiceRegisterXML{
         return new Tools($this->config, Certificate::readPfx($digitalCertificate, $passCertificate));
     }
 
-    private function ConsultReceipt($receipt){
+    private function ConsultReceipt($decodeCertificate, $receipt){
         try {
-            return $tools->sefazConsultaRecibo($receipt);
+            return $decodeCertificate->sefazConsultaRecibo($receipt);
         } catch (\Exception $e) {
             exit($e->getMessage());
         }
     }
-
-
 }
