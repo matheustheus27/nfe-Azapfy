@@ -11,7 +11,7 @@ class NFeServicePrintDA{
     public function __construct($xml){
 
        try{
-            $this->danfe = new Danfe($xml);
+            $this->danfe = new Danfe(file_get_contents($xml));
        } catch(Exception $e){
             dd($e->getMessage(), $e->getLine(), $e->getFile(), $xml);
        }

@@ -16,7 +16,7 @@ class NFeController extends Controller
     public function index()
     {
         
-        $nfeDanfe = new NFeServicePrintDA(file_get_contents("D:/Matheus Thiago/nfe.xml"));
+        $nfeDanfe = new NFeServicePrintDA("D:/Matheus Thiago/nfe.xml");
         header('Content-Type: application/pdf');
         echo $nfeDanfe->GenerateDanfe();;
     }
@@ -39,7 +39,7 @@ class NFeController extends Controller
      */
     public function store(Request $request)
     {
-       /* $nfe_serviceRegister  = new NFeServiceCreateXML([
+        $nfe_serviceRegister  = new NFeServiceCreateXML([
             "atualizacao"=>date('Y-m-d h:i:s'),
             "tpAmb"=> 2,
             "razaosocial" => "RAZAO SOCIAL DO EMISSOR",
@@ -57,7 +57,7 @@ class NFeController extends Controller
                 "proxyUser" => "",
                 "proxyPass" => ""
             ]
-        ]);*/
+        ]);
 
         //Teste de Parâmetro
         $nfe = [
@@ -101,8 +101,8 @@ class NFeController extends Controller
 
 
         
-        //header('Content-Type: text/xml; charset=UTF-8');
-        //return $nfe_serviceCreate->CreateNFe();
+        header('Content-Type: text/xml; charset=UTF-8');
+        return $nfe_serviceRegister->CreateNFe($nfe);
 
     }
 
