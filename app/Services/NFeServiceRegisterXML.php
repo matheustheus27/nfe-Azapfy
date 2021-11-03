@@ -6,6 +6,7 @@ use NFePHP\NFe\Complements;
 use NFePHP\NFe\Tools;
 use NFePHP\Common\Certificate;
 use NFePHP\NFe\Common\Standardize;
+use Exception;
 
 class NFeServiceRegisterXML{
     private $config;
@@ -34,8 +35,8 @@ class NFeServiceRegisterXML{
 
         try {
             return $decodeCertificate->signNFe($xml);
-        } catch (\Exception $e) {
-            exit($e->getMessage());
+        } catch (Exception $e) {
+            dd($e->getMessage());
         }
     }
 
@@ -53,16 +54,16 @@ class NFeServiceRegisterXML{
             }
 
             return $std->infRec->nRec;
-        } catch (\Exception $e) {
-            exit($e->getMessage());
+        } catch (Exception $e) {
+            dd($e->getMessage());
         }
     }
 
     private function GenerateProtocoledNFe($xmlSigned, $protocol){
         try {
             return Complements::toAuthorize($xmlSigned, $protocol);
-        } catch (\Exception $e) {
-            echo "Erro: " . $e->getMessage();
+        } catch (Exception $e) {
+            dd($e->getMessage());
         }
     }
 
@@ -73,8 +74,8 @@ class NFeServiceRegisterXML{
     private function ConsultReceipt($decodeCertificate, $receipt){
         try {
             return $decodeCertificate->sefazConsultaRecibo($receipt);
-        } catch (\Exception $e) {
-            exit($e->getMessage());
+        } catch (Exception $e) {
+            dd($e->getMessage());
         }
     }
 }
