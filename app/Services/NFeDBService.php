@@ -1,23 +1,24 @@
 <?php
 
+namespace App\Services;
+
+
 use Illuminate\Support\Facades\Schema;
 use App\NFeModel;
 
 class NFeDBService extends NFeModel{
-    protected $connection = 'mongodb';
+      protected $connection = 'mongodb';
 
-    public function CreateNFe($NFe){
-       Schema::create('NFe', function($collection){
-            
-       });
-    }
+      public function CreateNFe($NFe){
+         Schema::create($NFe);
+      }
 
-    public function FindSpecificNFe($nNF){
-       return NFeModel::collection('xmls')->where('nNF', $nNF)->first();
-    }
+      public function FindSpecificNFe($Id){
+         return NFeModel::where('Id', $Id)->first();
+      }
 
-    public function FindAllNFe($nNF){
-      return NFeModel::collection('xmls')->get();
-   }
+      public function FindAllNFe(){
+         return NFeModel::get();
+      }
 
 }

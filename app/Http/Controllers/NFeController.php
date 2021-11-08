@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\NFeServiceCreateXML;
 use App\Services\NFeServicePrintDA;
+use App\Services\NFeDBService;
 
 class NFeController extends Controller
 {
@@ -13,12 +14,24 @@ class NFeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
         
-        $nfeDanfe = new NFeServicePrintDA("D:/Matheus Thiago/nfe.xml");
-        header('Content-Type: application/pdf');
-        echo $nfeDanfe->GenerateDanfe();;
+       // $nfeDanfe = new NFeServicePrintDA("D:/Matheus Thiago/nfe.xml");
+       // header('Content-Type: application/pdf');
+       // echo $nfeDanfe->GenerateDanfe();
+
+        $page = file_get_contents("D:/Matheus Thiago/nfe.xml");
+        //$arrayXML  = $this->XML2Array($page);
+        $xml = simplexml_load_string($page, "SimpleXMLElement", LIBXML_NOCDATA);
+        $json = json_encode($xml);
+        $array = json_decode($json,TRUE);
+
+        $data = new NFeDBService();
+
+        $data->CreateNFe($array);
+        
     }
 
     /**
