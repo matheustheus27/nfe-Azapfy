@@ -22,16 +22,19 @@ class NFeController extends Controller
        // header('Content-Type: application/pdf');
        // echo $nfeDanfe->GenerateDanfe();
 
-        $page = file_get_contents("D:/Matheus Thiago/nfe.xml");
-        //$arrayXML  = $this->XML2Array($page);
+        $page = file_get_contents("D:/Matheus Thiago/31211097533031000140550010000492001758573730.xml");
         $xml = simplexml_load_string($page, "SimpleXMLElement", LIBXML_NOCDATA);
         $json = json_encode($xml);
         $array = json_decode($json,TRUE);
 
         $data = new NFeDBService();
-
-        $data->CreateNFe($array);
+        $Id = 'NFe31211002248312000144550010000630411285760362';
+        $infNfe = 0;
+        $return = $data->DeletepecificNFe($Id);
         
+        //dd($array['NFe']);
+        dd($return);
+        //echo json_encode($return);
     }
 
     /**

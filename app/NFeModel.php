@@ -2,9 +2,9 @@
 
 namespace App;
 
-use Jenssegers\Mongodb\Eloquent\Model;
+use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 
-class NFeModel extends Model
+class NFeModel extends Eloquent
 {
     protected $table = 'nfe_test';
 
@@ -19,6 +19,33 @@ class NFeModel extends Model
         'det',
         'imposto',
         'total'
+    ];
+
+    protected $fillable = [
+        'infNFe',
+        
+        'ide',
+        'emit',
+        'enderEmit',
+        'dest',
+        'enderDest',
+        'autXML',
+        'det',
+        'imposto',
+        'total',
+        'transp',
+        'cobr',
+        'infAdic',
+        'Signature',
+        'protNFe',
+        'NFe'
+
+    ];
+
+    protected $hidden = [
+        "_id",
+        "updated_at",
+        "created_at"
     ];
 
     protected $ide = [
