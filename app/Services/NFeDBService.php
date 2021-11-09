@@ -9,8 +9,10 @@ class NFeDBService extends NFeModel{
       protected $connection = 'azapfy3';
 
       #region Register | Update
-      public function RegisterNFe($NFe){
+      public function RegisterNFe($xml){
          try{
+            $NFe = $this->DecodeXML($xml);
+
             if($this->FindSpecificNFe($this->SearchID($NFe)) == 404){
                NFeModel::create($NFe);
                return 201;
@@ -23,8 +25,10 @@ class NFeDBService extends NFeModel{
          }
       }
 
-      public function UpdateNFe($NFe){
+      public function UpdateNFe($xml){
          try{
+            $NFe = $this->DecodeXML($xml);
+
             if($this->FindSpecificNFe($this->SearchID($NFe)) != 404){
                NFeModel::update($NFe);
                return 200;
@@ -63,7 +67,7 @@ class NFeDBService extends NFeModel{
       #endregion
 
       #region Delete
-      public function DeletepecificNFe($Id){
+      public function DeleteSpecificNFe($Id){
          try{
             $remove = $this->FindSpecificNFe($Id);
 
@@ -80,14 +84,22 @@ class NFeDBService extends NFeModel{
       #endregion
 
 
-      #region SearchID
-      private function SearchID($Id){
-         $Id = $Id['NFe'];
-         $Id = $Id['infNFe'];
-         $Id = $Id['@attributes'];
-         $Id = $Id["Id"];
+      #region Auxiliary Functions
+      private function SearchID($ID){
+         $ID = $ID['NFe'];
+         $ID = $ID['infNFe'];
+         $ID = $ID['@attributes'];
+         $ID = $ID["Id"];
 
-         return $Id;
+         return $ID;
+      }
+
+      private function DecodeXML($XML){
+         $XMLString = simplexml_load_string($XML, "SimpleXMLElement", LIBXML_NOCDATA);
+         $JSON = json_encode($XMLString);
+         $ARRAY = json_decode($JSON,TRUE);
+
+         return $ARRAY;
       }
       #endregion
 }
