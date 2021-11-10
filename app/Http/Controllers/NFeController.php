@@ -22,15 +22,16 @@ class NFeController extends Controller
        // header('Content-Type: application/pdf');
        // echo $nfeDanfe->GenerateDanfe();
 
-        $xml = file_get_contents("D:/Matheus Thiago/nfe.xml");
+        
 
         $data = new NFeDBService();
+        $xml = file_get_contents("D:/Matheus Thiago/nfe.xml");
         $Id = 'NFe31211002248312000144550010000630411285760362';
 
-        $return = $data->RegisterNFe($xml);
+        //$return = $data->RegisterNFe($xml);
         //$return = $data->UpdateNFe($array);
         //$return = $data->FindSpecificNFe($Id);
-        //$return = $data->FindAllNFe($Id);
+        $return = $data->FindAllNFe($Id);
         //$return = $data->DeleteSpecificNFe($Id);
         
         dd($return);

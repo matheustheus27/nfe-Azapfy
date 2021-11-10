@@ -43,9 +43,9 @@ class NFeModel extends Eloquent
     ];
 
     protected $hidden = [
-        "_id",
-        "updated_at",
-        "created_at"
+        '_id',
+        'updated_at',
+        'created_at',
     ];
 
     protected $ide = [

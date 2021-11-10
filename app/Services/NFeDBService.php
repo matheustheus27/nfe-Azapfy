@@ -59,7 +59,7 @@ class NFeDBService extends NFeModel{
 
       public function FindAllNFe(){
          try{
-            return NFeModel::get();
+            return NFeModel::get()->toArray();
          }catch(Exception $e){
             dd($e->getMessage());
          }
