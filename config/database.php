@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'azapfy3'),
+    'default' => env('DB_CONNECTION', 'justice'),
 
     /*
     |--------------------------------------------------------------------------
@@ -91,18 +91,18 @@ return [
             'prefix_indexes' => true,
         ],
 
-        'azapfy3' => [
+        'justice' => [
             'driver' => 'mongodb',
             'host' => env('DB_HOST', '192.168.100.5'),
             'port' => env('DB_PORT', 1434),
-            'database' => env('DB_DATABASE', 'azapfy3'),
+            //'database' => env('DB_DATABASE', 'JusticeLeague'),
             //'username' => env('DB_USERNAME', ''),
             //'password' => env('DB_PASSWORD', ''),
             'options' => [
                 // here you can pass more settings to the Mongo Driver Manager
                 // see https://www.php.net/manual/en/mongodb-driver-manager.construct.php under "Uri Options" for a list of complete parameters that you can use
         
-                'database' =>'azapfy' // required with Mongo 3+
+                'database' =>'JusticeLeague' // required with Mongo 3+
             ],
         ],
 

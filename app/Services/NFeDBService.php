@@ -2,11 +2,10 @@
 
 namespace App\Services;
 
-use App\NFeModel;
+use App\Models\NFeModel as NFeModel;
 use Exception;
 
 class NFeDBService extends NFeModel{
-      protected $connection = 'azapfy3';
 
       #region Register | Update
       public function RegisterNFe($xml){
